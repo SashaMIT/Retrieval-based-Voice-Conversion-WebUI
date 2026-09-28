@@ -43,7 +43,12 @@ def get_index_path_from_model(sid, speaker_id=None):
                     or ("_" + lower_experiment + "_v1") in lower_index
                     or ("_" + lower_experiment + "_v2") in lower_index
                 )
-                exact_model_match = model_stem.lower() in lower_index
+                # "mi" was matching miku.index. The name has to be the whole
+                # index name, or the start of it, so miku still finds miku_v2.
+                stem = model_stem.lower()
+                exact_model_match = lower_index == stem or lower_index.startswith(
+                    stem + "_"
+                )
                 if standard_match or exact_model_match:
                     path = os.path.abspath(os.path.join(root, name))
                     score = (
